@@ -1,3 +1,6 @@
+from math import acos, sqrt
+
+
 class Jarvis():
 	def __init__(self, points, height):
 		self.height = height
@@ -5,7 +8,7 @@ class Jarvis():
 		self.result = []
 
 
-	def find_first(self):
+	def __find_first(self):
 		by_x = lambda x: x[0]
 		by_y = lambda x: x[1]
 		self.points = sorted(self.points, key = by_x)
@@ -14,8 +17,14 @@ class Jarvis():
 		return first
 
 
-	def scalar_mult(self, point):
+	def __line_lenght(self, a, b):
 		really_y = lambda y: self.height - y
+		d_x = b[0] - a[0]
+		d_y = really_y(b[1]) - really_y(a[1])
+		return sqrt(d_x * d_x + d_y * d_y) 
+
+
+	def __angle_between_lines(self, p):
 		n = len(self.result)
 		if n < 2:
 			b = self.result[0]
@@ -23,28 +32,31 @@ class Jarvis():
 		else:
 			a = self.result[n - 2]
 			b = self.result[n - 1]
-		vec_ab = (b[0] - a[0], really_y(b[1]) - really_y(a[1]))
-		vec_bp = (point[0] - b[0], really_y(point[1]) - really_y(b[1]))
-		res = vec_ab[0] * vec_bp[0] + vec_ab[1] * vec_bp[1]
-		return res
+		ab = self.__line_lenght(a, b)
+		bp = self.__line_lenght(b, p)
+		ap = self.__line_lenght(a, p)
+		cos_value = (bp * bp + ab * ab - ap * ap) / (2 * ab * bp)
+		return acos(cos_value)
 
 
-	def id_next_point(self):
+	def __id_next_point(self):
 		n = len(self.points)
-		idm, mc = 0, -1000 * 1000
+		l = len(self.result)
+		idm, mc = 0, -180
 		for i in range(0, n):
-			c = self.scalar_mult(self.points[i])
-			if c > mc:
-				idm = i
-				mc = c
+			if (self.result[l-1] != self.points[i]):
+				c = self.__angle_between_lines(self.points[i])
+				if c > mc:
+					idm = i
+					mc = c
 		return idm
 
 
 	def solver(self):
-		first = self.find_first()
+		first = self.__find_first()
 		self.result.append(first)
 		while True:
-			id = self.id_next_point()
+			id = self.__id_next_point()
 			if id == 0:
 				break
 			else:
