@@ -1,48 +1,48 @@
 class Jarvis():
-	def __init__(self, points):
+	def __init__(self, points, height):
+		self.height = height
 		self.points = points
 		self.result = []
 
 
-	def find_first_second(self):
-		first = (-1, -1)
-		second = (-1, -1)
+	def find_first(self):
 		by_x = lambda x: x[0]
 		by_y = lambda x: x[1]
 		self.points = sorted(self.points, key = by_x)
 		self.points = sorted(self.points, key = by_y, reverse = True)
 		first = self.points[0]
-		second = self.points[1]
-		return first, second
+		return first
 
 
 	def scalar_mult(self, point):
-		if len(self.result) < 2:
-			return 100000	
+		really_y = lambda y: self.height - y
 		n = len(self.result)
-		a = self.result[n-2]
-		b = self.result[n-1]
-		vec_a = (b[0] - a[0], b[1] - a[1])
-		vec_b = (point[0] - b[0], point[1] - b[1])
-		return vec_a[0] * vec_b[0] + vec_a[1] * vec_b[1]
+		if n < 2:
+			b = self.result[0]
+			a = (b[0] - 1, b[1])
+		else:
+			a = self.result[n - 2]
+			b = self.result[n - 1]
+		vec_ab = (b[0] - a[0], really_y(b[1]) - really_y(a[1]))
+		vec_bp = (point[0] - b[0], really_y(point[1]) - really_y(b[1]))
+		res = vec_ab[0] * vec_bp[0] + vec_ab[1] * vec_bp[1]
+		return res
 
 
 	def id_next_point(self):
 		n = len(self.points)
-		idm, mc = 0, 2
-		for i in range(1, n):
+		idm, mc = 0, -1000 * 1000
+		for i in range(0, n):
 			c = self.scalar_mult(self.points[i])
-			if c < mc:
+			if c > mc:
 				idm = i
 				mc = c
-		
 		return idm
 
 
 	def solver(self):
-		first, second = self.find_first_second()
+		first = self.find_first()
 		self.result.append(first)
-		self.result.append(second)
 		while True:
 			id = self.id_next_point()
 			if id == 0:
@@ -51,5 +51,4 @@ class Jarvis():
 				self.result.append(self.points[id])
 				del self.points[id]
 		self.result.append(first)
-
 		return self.result

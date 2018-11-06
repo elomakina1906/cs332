@@ -1,8 +1,8 @@
 import tkinter as tk
 from jarvis import Jarvis
 
-WIDTH = 500
-HEIGHT = 300
+WIDTH = 1000
+HEIGHT = 500
 
 
 class Main(tk.Frame):
@@ -47,9 +47,12 @@ class Main(tk.Frame):
 
 
 	def do_js(self, event):
+		self.vertexes.clear()
+		self.canvas.delete("all")
+		self.draw_points()
 		if len(self.points) < 3:
 			return
-		js = Jarvis(self.points)
+		js = Jarvis(self.points, self.canvas.winfo_height())
 		self.vertexes = js.solver()
 		self.draw_lines()
 		print(self.vertexes)
