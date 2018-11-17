@@ -1,11 +1,11 @@
 import tkinter as tk
-from winclass import Main
+from winclass import MainWindow
 
 
 def main():
 	parent = tk.Tk()
-	win = Main(parent)
-	win.mainloop()
+	wi = MainWindow(parent)
+	wi.mainloop()
 
 
 if __name__ == '__main__':
