@@ -203,45 +203,26 @@ rayTracePt d (Scene (Camera eye _) b o l) p = colorPt d (Ray p (mkNormVect eye p
 rayTrace :: Int -> Resolution -> Scene -> Image
 rayTrace d r s@(Scene (Camera _ dim) _ _ _) = (rayTracePt d s) . (mapToWin r dim)
 
---main :: IO ()
---main = start gui
+main :: IO ()
+main = start roomFrame
 
 radius, maxX, maxY :: Int
-maxY = 300
-maxX = 300
+maxY = 500
+maxX = 500
 radius = 10
-
--- the max. height is at most max. y minus the radius of a ball.
-maxH :: Int
-maxH = maxY - radius
-
---the main function
-main = start ballsFrame
-
-ballsFrame
+roomFrame
   = do -- a list of balls, where each ball is represented
        -- by a list of all future positions.
        vballs <- varCreate []
 
        -- create a non-user-resizable top-level (orphan) frame.
-       f <- frameFixed [text := "Bouncing balls"]
+       f <- frameFixed [text := "Room"]
 
        -- create a panel to draw in.
        p <- panel f [on paint := paintBalls vballs]
 
-       -- create a timer that updates the ball positions
-       t <- timer f [interval := 20, on command := nextBalls vballs p]
-
        -- react on user input
-       set p [on click         := dropBall vballs p              -- drop ball
-             ,on clickRight    := (\pt -> ballsFrame)            -- new window
-             ,on (charKey 'p') := set t [enabled   :~ not]        -- pause
-             ,on (charKey '-') := set t [interval :~ \i -> i*2]  -- increase interval
-             ,on (charKey '+') := set t [interval :~ \i -> max 1 (i `div` 2)]
-             ]
-
-       -- put the panel in the frame, with a minimal size
-       set f [layout := minsize (sz maxX maxY) $ widget p]
+       set p [on click         := dropBall vballs p]
    where
    	-- paint the balls
     paintBalls :: Var [[Point]] -> DC a -> Rect -> IO ()
@@ -252,3 +233,11 @@ ballsFrame
 
     drawBall dc pt
       = circle dc pt radius []
+
+    dropBall :: Var [[Point]] -> Panel () -> Point -> IO ()
+    dropBall vballs p pt
+      = do varUpdate vballs (bouncing pt:)
+           repaint p
+
+    bouncing (Point x y)
+      = map (\h -> Point x h) (replicate 20 y)
