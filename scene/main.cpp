@@ -45,11 +45,11 @@ GLuint uvbufferApple;
 GLuint normalbufferApple;
 GLuint elementbufferApple;
 
-string objectAppleName = "apple.obj";
-string objectAppleTextureName = "apple.jpg";
+string objectAppleName = "./resource/apple.obj";
+string objectAppleTextureName = "./resource/apple.jpg";
 double scaleObjectApple = 0.1;
-string objectTableName = "table.obj";
-string objectTableTextureName = "wood.jpg";
+string objectTableName = "./resource/table.obj";
+string objectTableTextureName = "./resource/wood.jpg";
 double scaleObjectTable = 4;
 float rotateX = 0, rotateY = 0, rotateZ = 0;
 
@@ -610,7 +610,7 @@ int main(int argc, char **argv)
 	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB);
 	glutInitWindowSize(700, 700);
 	glutInitWindowPosition(250, 5);
-	glutCreateWindow("indiv3");
+	glutCreateWindow("Scene");
 
 	glewInit();
 

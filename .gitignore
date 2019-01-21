@@ -460,3 +460,4 @@ ASALocalRun/
 healthchecksdb
 
 glm/
+!scene/resource/*.obj
