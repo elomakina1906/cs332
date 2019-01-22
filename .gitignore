@@ -460,4 +460,9 @@ ASALocalRun/
 healthchecksdb
 
 glm/
-!scene/resource/*.obj
+glew/
+freeglut/
+soil/
+cwc/
+!scene/f_1.obj
+!scene/f_2.obj
