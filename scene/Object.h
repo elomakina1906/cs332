@@ -1,6 +1,9 @@
 #pragma once
 
 #include "structures.h"
+#include "glsl.h"
+
+using namespace cwc;
 
 class Object {
 	Vector3D position, rotation, model_rotation;
@@ -18,7 +21,6 @@ public:
 	void loadModel(const char* fileName) {
 		ifstream file;
 		file.open(fileName);
-		cout << endl << fileName << " | Opened: " << file.is_open() << endl << endl;
 		if (file.is_open()) {
 			char line[64];
 			vector<Vector3D> v_list;
@@ -28,28 +30,37 @@ public:
 				file.getline(line, 64);
 				if (strlen(line)) {
 					stringstream ss(line);
-					string line_code; ss >> line_code;
+					string line_code;
+					ss >> line_code;
 					if (line_code == "v") {
 						Vector3D v;
 						GLfloat coord;
-						ss >> coord; v.x = coord;
-						ss >> coord; v.y = coord;
-						ss >> coord; v.z = coord;
+						ss >> coord;
+						v.x = coord;
+						ss >> coord;
+						v.y = coord;
+						ss >> coord;
+						v.z = coord;
 						v_list.push_back(v);
 					}
 					if (line_code == "vt") {
 						Vector2D vt;
 						GLfloat coord;
-						ss >> coord; vt.x = coord;
-						ss >> coord; vt.y = coord;
+						ss >> coord;
+						vt.x = coord;
+						ss >> coord;
+						vt.y = coord;
 						vt_list.push_back(vt);
 					} 
 					if (line_code == "vn") {
 						Vector3D vn;
 						GLfloat coord;
-						ss >> coord; vn.x = coord;
-						ss >> coord; vn.y = coord;
-						ss >> coord; vn.z = coord;
+						ss >> coord;
+						vn.x = coord;
+						ss >> coord;
+						vn.y = coord;
+						ss >> coord;
+						vn.z = coord;
 						vn_list.push_back(vn);
 					}
 					if (line_code == "f") {
@@ -60,9 +71,12 @@ public:
 							ss >> s;
 							replace(s.begin(), s.end(), '/', ' ');
 							stringstream ss(s);
-							ss >> ind; _vertex.v = v_list[ind - 1];
-							ss >> ind; _vertex.vt = vt_list[ind - 1];
-							ss >> ind; _vertex.vn = vn_list[ind - 1];
+							ss >> ind;
+							_vertex.v = v_list[ind - 1];
+							ss >> ind;
+							_vertex.vt = vt_list[ind - 1];
+							ss >> ind;
+							_vertex.vn = vn_list[ind - 1];
 							vertexes.push_back(_vertex);
 						}
 					}
@@ -75,13 +89,15 @@ public:
 
 	void loadTexture(const char* fileName) {
 		texture = SOIL_load_OGL_texture(fileName, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-		if (texture == 0) return;
+		if (texture == 0) {
+			return;
+		}
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	}
 
-	void draw(cwc::glShader *shader) {
+	void draw(glShader *shader) {
 		glPushMatrix();
 		glRotatef(rotation.x, 1, 0, 0);
 		glRotatef(rotation.y, 0, 1, 0);

@@ -47,24 +47,6 @@ struct PointLight {
 	Vector3D specular;
 };
 
-struct SpotLight {
-	bool active;
-	Vector3D position;
-	Vector3D direction;
-	Vector3D ambient;
-	Vector3D diffuse;
-	Vector3D specular;
-	GLfloat cutoff;
-};
-
-struct DirectionalLight {
-	bool active;
-	Vector3D direction;
-	Vector3D ambient;
-	Vector3D diffuse;
-	Vector3D specular;
-};
-
 struct Material {
 	Vector3D ambient;
 	Vector3D diffuse;
