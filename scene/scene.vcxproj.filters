@@ -90,6 +90,9 @@
     <ClCompile Include="glew\source\glew.c">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Control.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="freeglut\source\freeglutdll.def">

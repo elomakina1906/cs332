@@ -110,6 +110,7 @@
     <ClInclude Include="structures.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Control.cpp" />
     <ClCompile Include="cwc\source\glsl.cpp" />
     <ClCompile Include="freeglut\source\freeglut_callbacks.c" />
     <ClCompile Include="freeglut\source\freeglut_cursor.c" />
